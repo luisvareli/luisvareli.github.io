@@ -35,6 +35,88 @@
     });
   }
 
+
+  // ---- numbers count up when they come into view
+  function countUp(el) {
+    var target = +el.getAttribute('data-count'), prefix = el.getAttribute('data-prefix') || '';
+    var start = performance.now(), dur = 1100;
+    (function tick(now) {
+      var k = Math.min((now - start) / dur, 1), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = prefix + Math.round(target * e).toLocaleString('en-US');
+      if (k < 1) requestAnimationFrame(tick);
+    })(start);
+  }
+  var counters = document.querySelectorAll('[data-count]');
+  if (!reduce && 'IntersectionObserver' in window) {
+    var cio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { countUp(e.target); cio.unobserve(e.target); } });
+    }, { threshold: 0.6 });
+    counters.forEach(function (el) { cio.observe(el); });
+  }
+
+  // ---- layer stack: the list drives the 3D slabs
+  var btns = document.querySelectorAll('.layer-btn'), slabs = document.querySelectorAll('.slab');
+  var touched = false, current = 0;
+  function showLayer(n) {
+    current = n;
+    btns.forEach(function (b) { b.classList.toggle('on', +b.getAttribute('data-layer') === n); });
+    slabs.forEach(function (sl) { sl.classList.toggle('on', +sl.getAttribute('data-slab') === n); });
+  }
+  btns.forEach(function (b) {
+    var n = +b.getAttribute('data-layer');
+    function pick() { touched = true; showLayer(n); }
+    b.addEventListener('click', pick);
+    b.addEventListener('focus', pick);
+    b.addEventListener('pointerenter', function (ev) { if (ev.pointerType === 'mouse') pick(); });
+  });
+  if (btns.length && !reduce) {
+    setInterval(function () { if (!touched && !document.hidden) showLayer((current + 1) % btns.length); }, 3200);
+  }
+
+  // ---- defect demo: replays the recorded result of the project's defect check
+  var plant = document.getElementById('demo-plant'), run = document.getElementById('demo-run');
+  var out = document.getElementById('demo-out'), code = document.getElementById('demo-code');
+  var line = document.getElementById('demo-line'), state = document.getElementById('demo-state');
+  if (plant && run && out) {
+    var planted = false, timers = [];
+    var GOOD = '  <span class="kw">AND</span> <span class="fn">business_date</span>(i.issued_at) <span class="kw">BETWEEN</span> p_from <span class="kw">AND</span> p_to';
+    var BAD = '  <span class="kw">AND</span> <span class="fn">business_date</span>(i.issued_at) &gt;= p_from\n  <span class="kw">AND</span> <span class="fn">business_date</span>(i.issued_at) &lt; p_to   <span class="cm">-- last day dropped</span>';
+    var PASS = ['source data integrity · 6 tests', 'monthly sales report · 20 tests', 'accounts receivable aging · 24 tests', 'inventory valuation · 16 tests'];
+    var FAIL = ['matches the source data for the full year', 'matches the source data for a single day', 'counts every posted document of 2025 exactly once', 'puts an invoice issued at 23:30 on Jan 31 in January', 'keeps the last second of the year in the year it belongs to', 'adds up: four quarters equal the year'];
+    function row(cls, mark, text) {
+      var li = document.createElement('li'); if (cls) li.className = cls;
+      var a = document.createElement('span'); a.className = cls.split(' ').pop(); a.textContent = mark;
+      var b = document.createElement('span'); b.textContent = text;
+      li.appendChild(a); li.appendChild(b); out.appendChild(li);
+    }
+    function setPlanted(v) {
+      planted = v;
+      plant.setAttribute('aria-pressed', String(v));
+      plant.textContent = v ? 'Remove the defect' : 'Plant the defect';
+      code.classList.toggle('bad', v);
+      line.innerHTML = (v ? BAD : GOOD) + '\n';
+      state.textContent = v ? 'defect planted' : 'as written';
+    }
+    plant.addEventListener('click', function () { setPlanted(!planted); });
+    run.addEventListener('click', function () {
+      timers.forEach(clearTimeout); timers = []; out.textContent = '';
+      var steps = [];
+      if (planted) {
+        steps.push(['ok', '✓', PASS[0]], ['ok', '✓', PASS[3]], ['ok', '✓', 'accounts receivable aging · 24 tests']);
+        FAIL.forEach(function (f) { steps.push(['ko', '✗', f]); });
+        steps.push(['ko', '✗', '4 more in monthly sales report']);
+        steps.push(['sum ko', '', '10 failed · 56 passed. The defect did not get through.']);
+      } else {
+        PASS.forEach(function (p) { steps.push(['ok', '✓', p]); });
+        steps.push(['sum ok', '', '66 passed · 0 failed']);
+      }
+      steps.forEach(function (st, i) {
+        if (reduce) { row(st[0], st[1], st[2]); return; }
+        timers.push(setTimeout(function () { row(st[0], st[1], st[2]); }, 160 + i * 170));
+      });
+    });
+  }
+
   // ---- hero scene: a system being checked, point by point.
   // A sphere of points stands for everything that can be tested. A ring sweeps
   // down it; points it has passed turn green, and a few turn amber: the defects.
@@ -119,7 +201,7 @@
       var color = '120,140,133';
       if (checked) {
         if (p.flag) { color = '255,180,84'; size *= 1.9; alpha = (0.5 + depth * 0.5) * fade + 0.2 * (1 - fade); }
-        else { color = '95,227,168'; alpha = (0.22 + depth * 0.62) * fade + alpha * (1 - fade) * 0.6; }
+        else { color = '79,240,176'; alpha = (0.22 + depth * 0.62) * fade + alpha * (1 - fade) * 0.6; }
       }
       if (near > 0.05 && phase < 6.2) { size *= 1 + near * 1.1; alpha = Math.min(1, alpha + near * 0.6); if (!p.flag) color = '190,255,225'; }
       ctx.beginPath();
