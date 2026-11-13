@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Report tests that prove they can fail | Luis Vargas</title>
+<meta name="description" content="66 automated tests for three financial reports on a sample ERP database, checked against 14 planted defects.">
+<meta property="og:title" content="Report tests that prove they can fail | Luis Vargas">
+<meta property="og:description" content="66 automated tests for three financial reports on a sample ERP database, checked against 14 planted defects.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://luisvareli.github.io/case-reporting.html">
+<meta name="theme-color" content="#10201b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2310201b'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' fill='none' stroke='%235fd39a' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Schibsted+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<a class="skip-link" href="#top">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html">Luis Vargas<span>.</span>QA</a>
+    <nav aria-label="Sections">
+      <a href="index.html#services">Services</a>
+      <a href="index.html#work">Work</a>
+      <a href="index.html#process">Process</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="page-hero">
+    <div class="wrap">
+      <a class="crumb" href="index.html#work">← All work</a>
+      <h1>Report tests that <em>prove they can fail</em></h1>
+      <p class="lead">Automated tests for three financial reports on a sample ERP database. A sample project of my own: the schema, the data and the reports were written for it.</p>
+      <div class="cta">
+        <a class="btn" href="https://github.com/luisvareli/erp-reporting-data-tests" target="_blank" rel="noopener">Read the code on GitHub</a>
+        <a class="link" href="https://github.com/luisvareli/erp-reporting-data-tests/actions" target="_blank" rel="noopener">See the pipeline runs</a>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap split">
+      <h2>The problem</h2>
+      <div class="prose">
+        <p>A report can look right and still be wrong. A join counts an invoice twice. A date filter drops the last day of the month. A total is off by a cent because tax was rounded in the wrong place. Nothing crashes, and nobody notices until the numbers stop matching accounting.</p>
+        <p>These defects do not show up in UI tests. You find them by checking the numbers against the data they came from.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap split">
+      <h2>What I built</h2>
+      <div class="prose">
+        <p><b>66 tests</b> in TypeScript and Vitest against PostgreSQL, for monthly sales, accounts receivable aging and inventory valuation. The suite runs in about 2 seconds.</p>
+        <dl class="layers">
+          <div><dt>Source integrity</dt><dd>Is the data itself consistent? Queries that return the offending rows for rules a constraint cannot express.</dd></div>
+          <div><dt>Reconciliation</dt><dd>Expected values are recomputed from the raw rows in TypeScript. They share no SQL with the reports, so a wrong join does not repeat itself in the check.</dd></div>
+          <div><dt>Control totals</dt><dd>The aging report must tie to three plain sums: invoiced, paid and credited.</dd></div>
+          <div><dt>Hand-checked cases</dt><dd>16 documents, each built to break one rule, with the expected value worked out by hand.</dd></div>
+          <div><dt>Boundaries</dt><dd>An invoice issued at 23:30 local time on the last day of the month. A payment on the cut-off date. Day 30 and day 31 past due.</dd></div>
+          <div><dt>Invariants</dt><dd>Buckets add up to the total. Four quarters add up to the year. The session time zone changes nothing.</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap split">
+      <h2>How I know the tests work</h2>
+      <div class="prose">
+        <p>Tests that pass prove little on their own. So I planted <b>14 defects</b> in the report SQL, one at a time: small, realistic mistakes of the kind that pass a code review. The suite has to fail for each one. If a defect goes unnoticed, the command fails and so does the pipeline.</p>
+        <div class="run" role="img" aria-label="Output of the seeded defect check: 14 of 14 defects caught">
+          <div class="run-head"><span>npm run test:defects</span><span>GitHub Actions</span></div>
+          <ul>
+            <li class="two"><span class="tick">D01</span><span>an invoice with two payments is counted twice</span><span class="t">11 tests</span></li>
+            <li class="two"><span class="tick">D02</span><span>the last day of the range is dropped</span><span class="t">10 tests</span></li>
+            <li class="two"><span class="tick">D03</span><span>void documents are included in sales</span><span class="t">5 tests</span></li>
+            <li class="two"><span class="tick">D06</span><span>day 30 lands in the 31-60 bucket</span><span class="t">6 tests</span></li>
+            <li class="two"><span class="tick">D09</span><span>dates are taken in UTC, not company time</span><span class="t">10 tests</span></li>
+            <li class="two"><span class="tick">D11</span><span>line amounts are truncated, not rounded</span><span class="t">10 tests</span></li>
+            <li class="two"><span class="tick">D14</span><span>average cost ignores quantities</span><span class="t">4 tests</span></li>
+          </ul>
+          <div class="run-foot"><span><b>14 of 14 caught</b></span><span>0 missed</span></div>
+        </div>
+        <p>The full list, with the tests that catch each defect, is in the <a class="link" href="https://github.com/luisvareli/erp-reporting-data-tests/blob/master/docs/defect-catalog.md" target="_blank" rel="noopener">defect catalog</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap split">
+      <h2>Limits</h2>
+      <div class="prose">
+        <ul>
+          <li>The reports were written for this project. It shows the method, not defects found in a real product.</li>
+          <li>The data set is small, so performance is out of scope.</li>
+          <li>The checks and the reports follow the same written rules. If a rule is wrong, both are wrong. On a real project I confirm the rules with accounting before writing tests.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact">
+    <div class="wrap">
+      <h2>Have something that needs testing?</h2>
+      <p class="sub">Tell me what the app does and what worries you. I usually reply within a day.</p>
+      <div class="cta">
+        <a class="btn" href="https://www.linkedin.com/in/luis-vargas-elizondo/" target="_blank" rel="noopener">Message me on LinkedIn</a>
+        <a class="link" href="https://www.upwork.com/freelancers/~0130ccdbb1c0030e63" target="_blank" rel="noopener">Hire me on Upwork</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Luis Vargas · QA automation · Costa Rica · <a href="https://github.com/luisvareli" target="_blank" rel="noopener">GitHub</a> · <a href="https://www.linkedin.com/in/luis-vargas-elizondo/" target="_blank" rel="noopener">LinkedIn</a></div>
+</footer>
+</body>
+</html>

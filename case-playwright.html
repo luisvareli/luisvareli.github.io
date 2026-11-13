@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Playwright suite you can read | Luis Vargas</title>
+<meta name="description" content="27 end-to-end, API and accessibility tests in Playwright and TypeScript against a public demo shop, running in GitHub Actions.">
+<meta property="og:title" content="A Playwright suite you can read | Luis Vargas">
+<meta property="og:description" content="27 end-to-end, API and accessibility tests in Playwright and TypeScript against a public demo shop, running in GitHub Actions.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://luisvareli.github.io/case-playwright.html">
+<meta name="theme-color" content="#10201b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2310201b'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' fill='none' stroke='%235fd39a' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Schibsted+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<a class="skip-link" href="#top">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html">Luis Vargas<span>.</span>QA</a>
+    <nav aria-label="Sections">
+      <a href="index.html#services">Services</a>
+      <a href="index.html#work">Work</a>
+      <a href="index.html#process">Process</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="page-hero">
+    <div class="wrap">
+      <a class="crumb" href="index.html#work">← All work</a>
+      <h1>A Playwright suite <em>you can read</em></h1>
+      <p class="lead">End-to-end, API and accessibility tests against a public demo shop. A sample project of my own, written the way I would write it for a client.</p>
+      <div class="cta">
+        <a class="btn" href="https://github.com/luisvareli/toolshop-playwright-tests" target="_blank" rel="noopener">Read the code on GitHub</a>
+        <a class="link" href="https://github.com/luisvareli/toolshop-playwright-tests/actions" target="_blank" rel="noopener">See the pipeline runs</a>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap split">
+      <h2>What it covers</h2>
+      <div class="prose">
+        <p><b>27 tests</b> in Playwright and TypeScript. The pipeline runs them on every change: 26 pass, and 1 is skipped because it needs credentials that are not in the repo.</p>
+        <dl class="layers">
+          <div><dt>API</dt><dd>Product, category and brand endpoints, with the response shape checked against a schema.</dd></div>
+          <div><dt>UI</dt><dd>Search and sort, cart, forms and guest checkout.</dd></div>
+          <div><dt>Mobile</dt><dd>The same checkout on a phone-sized screen.</dd></div>
+          <div><dt>Accessibility</dt><dd>An automated scan of the main pages, with known issues kept in a baseline so new ones stand out.</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap split">
+      <h2>Choices I made</h2>
+      <div class="prose">
+        <ul>
+          <li><b>Expected values come from the API.</b> A UI test asks the API what the price is and checks that the page shows it. When the demo data changes, the tests do not break for the wrong reason.</li>
+          <li><b>Page objects stay small.</b> One per page, with only the actions the tests need.</li>
+          <li><b>The checkout test is split into named steps.</b> A failed run tells you which step broke, not only which line.</li>
+          <li><b>There is a written strategy.</b> It says what is tested, what is left out and why.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap split">
+      <h2>What it found</h2>
+      <div class="prose">
+        <ul>
+          <li><b>Two accessibility defects.</b> Lists on the home page contain items that are not list items, and a button on the sign-in page has no name, so a screen reader says only "button".</li>
+          <li><b>An API inconsistency.</b> A product carries its brand without the <code>slug</code> field that the brands endpoint returns.</li>
+          <li><b>A page that only fails in the pipeline.</b> Opening the checkout by URL works on my machine and renders without its data in GitHub Actions. I have not found the cause yet. It is written down as open, and the tests go through the menu.</li>
+          <li><b>A lesson about timing.</b> Scanning for accessibility before the page finished loading reported nothing. The scan now waits for the network to settle.</li>
+        </ul>
+        <p>All six are in the <a class="link" href="https://github.com/luisvareli/toolshop-playwright-tests/blob/master/docs/findings.md" target="_blank" rel="noopener">findings document</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact">
+    <div class="wrap">
+      <h2>Have something that needs testing?</h2>
+      <p class="sub">Tell me what the app does and what worries you. I usually reply within a day.</p>
+      <div class="cta">
+        <a class="btn" href="https://www.linkedin.com/in/luis-vargas-elizondo/" target="_blank" rel="noopener">Message me on LinkedIn</a>
+        <a class="link" href="https://www.upwork.com/freelancers/~0130ccdbb1c0030e63" target="_blank" rel="noopener">Hire me on Upwork</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Luis Vargas · QA automation · Costa Rica · <a href="https://github.com/luisvareli" target="_blank" rel="noopener">GitHub</a> · <a href="https://www.linkedin.com/in/luis-vargas-elizondo/" target="_blank" rel="noopener">LinkedIn</a></div>
+</footer>
+</body>
+</html>
