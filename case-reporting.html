@@ -9,7 +9,7 @@
 <meta property="og:description" content="66 automated tests for three financial reports on a sample ERP database, checked against 14 planted defects.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://luisvareli.github.io/case-reporting.html">
-<meta name="theme-color" content="#10201b">
+<meta name="theme-color" content="#060a09">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2310201b'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' fill='none' stroke='%235fd39a' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,7 +45,7 @@
   </div>
 
   <section>
-    <div class="wrap split">
+    <div class="wrap split reveal">
       <h2>The problem</h2>
       <div class="prose">
         <p>A report can look right and still be wrong. A join counts an invoice twice. A date filter drops the last day of the month. A total is off by a cent because tax was rounded in the wrong place. Nothing crashes, and nobody notices until the numbers stop matching accounting.</p>
@@ -55,7 +55,7 @@
   </section>
 
   <section>
-    <div class="wrap split">
+    <div class="wrap split reveal">
       <h2>What I built</h2>
       <div class="prose">
         <p><b>66 tests</b> in TypeScript and Vitest against PostgreSQL, for monthly sales, accounts receivable aging and inventory valuation. The suite runs in about 2 seconds.</p>
@@ -72,7 +72,7 @@
   </section>
 
   <section>
-    <div class="wrap split">
+    <div class="wrap split reveal">
       <h2>How I know the tests work</h2>
       <div class="prose">
         <p>Tests that pass prove little on their own. So I planted <b>14 defects</b> in the report SQL, one at a time: small, realistic mistakes of the kind that pass a code review. The suite has to fail for each one. If a defect goes unnoticed, the command fails and so does the pipeline.</p>
@@ -95,7 +95,7 @@
   </section>
 
   <section>
-    <div class="wrap split">
+    <div class="wrap split reveal">
       <h2>Limits</h2>
       <div class="prose">
         <ul>
@@ -109,11 +109,13 @@
 
   <section class="contact">
     <div class="wrap">
+      <div class="panel reveal">
       <h2>Have something that needs testing?</h2>
       <p class="sub">Tell me what the app does and what worries you. I usually reply within a day.</p>
       <div class="cta">
         <a class="btn" href="https://www.linkedin.com/in/luis-vargas-elizondo/" target="_blank" rel="noopener">Message me on LinkedIn</a>
         <a class="link" href="https://www.upwork.com/freelancers/~0130ccdbb1c0030e63" target="_blank" rel="noopener">Hire me on Upwork</a>
+      </div>
       </div>
     </div>
   </section>
@@ -122,5 +124,6 @@
 <footer>
   <div class="wrap">Luis Vargas · QA automation · Costa Rica · <a href="https://github.com/luisvareli" target="_blank" rel="noopener">GitHub</a> · <a href="https://www.linkedin.com/in/luis-vargas-elizondo/" target="_blank" rel="noopener">LinkedIn</a></div>
 </footer>
+<script src="site.js" defer></script>
 </body>
 </html>
