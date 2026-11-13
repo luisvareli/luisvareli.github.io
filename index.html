@@ -45,7 +45,7 @@
         <dl class="stats">
           <div><dt>test executions analyzed</dt><dd data-count="2440">2,440</dd></div>
           <div><dt>test cases audited</dt><dd data-count="4400" data-prefix="~">~4,400</dd></div>
-          <div><dt>automated tests in my public repos</dt><dd data-count="93">93</dd></div>
+          <div><dt>automated tests in my public repos</dt><dd data-count="134">134</dd></div>
           <div><dt>planted defects caught</dt><dd>14/14</dd></div>
         </dl>
       </div>
@@ -145,7 +145,7 @@
   <section id="work">
     <div class="wrap">
       <h2 class="reveal">Work I can point to</h2>
-      <p class="sub reveal">From my job on an enterprise formulation platform used by chemical, food and pharmaceutical manufacturers, and from two sample projects of my own.</p>
+      <p class="sub reveal">From my job on an enterprise formulation platform used by chemical, food and pharmaceutical manufacturers, and from three sample projects of my own.</p>
       <div class="cases">
         <article class="case card reveal">
           <h3>Finding out what a regression suite is worth</h3>
@@ -162,6 +162,10 @@
         <article class="case card reveal">
           <h3>Report tests that prove they can fail</h3>
           <p><b>66 tests</b> for three financial reports on a sample ERP database in PostgreSQL. Expected values are recomputed from the raw rows, not re-queried. To check the tests themselves, I planted <span class="found">14 realistic defects</span> in the report SQL; the suite catches all 14, and the pipeline fails if one ever slips through.<br><a class="link more" href="case-reporting.html">Read the case study</a><img class="badge" src="https://github.com/luisvareli/erp-reporting-data-tests/actions/workflows/tests.yml/badge.svg" alt="Current pipeline status of the reporting project" loading="lazy" height="20"></p>
+        </article>
+        <article class="case card reveal">
+          <h3>An evaluation harness for AI output</h3>
+          <p><b>41 tests</b> around an assistant that triages support tickets. Every ticket runs five times, rewritten tickets must get the same decision, and a release gate compares each version with the last accepted one, ticket by ticket. <span class="found">Ten defective versions</span> are each rejected by the check that matches the defect. The assistant is a rule-based stand-in, so the project shows the method, not results about a real model.<br><a class="link more" href="https://github.com/luisvareli/ai-triage-evals" target="_blank" rel="noopener">Read the code on GitHub</a><img class="badge" src="https://github.com/luisvareli/ai-triage-evals/actions/workflows/eval.yml/badge.svg" alt="Current pipeline status of the AI evaluation project" loading="lazy" height="20"></p>
         </article>
       </div>
     </div>
